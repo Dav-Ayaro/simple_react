@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- React -->
+        <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+        <!-- React DOM -->
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+        <!-- Babel -->
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <style>
+            .incorect{
+                color: red;
+            }
+        </style>
+    </head>
+    <title>NEWFORCE</title>
+    <body>
+        <div id="one"></div>
+        <script type="text/babel">
+            class App extends React.Component{
+                constructor(props){
+                    super(props);
+                    this.state = {
+                        number1: 1,
+                        number2: 1,
+                        Score: 0,
+                        Response: "",
+                        incorect: false,
+                    }
+                }
+                render (){
+                    if (this.state.Score >= 5){
+                        return this.renderWin();
+                    }else{
+                        return this.renderProblem();
+                    }
+                }
+                renderProblem (){
+                    return (
+                        <div>
+                            <h1 className={this.state.incorect ? "incorect" : ""}>{this.state.number1} + {this.state.number2}</h1> 
+                            <input onKeyPress={this.onKeyPress} onChange={this.updateResponse} value={this.state.Response} />
+                            <div>
+                                Score: {this.state.Score}
+                            </div>    
+                        </div>
+                    );
+                }
+                renderWin(){
+                    return(
+                        <h1> Congulatulations You Win The Game </h1>
+                    );
+                }
+                updateResponse = (event) =>{
+                    this.setState({
+                        Response: event.target.value
+                    });
+                }
+                onKeyPress = (event) =>{
+                    if (event.key === "Enter"){
+                        const answer = parseInt(this.state.Response);
+                        if (answer === this.state.number1 + this.state.number2){
+                            // do something if the Answer is right
+                            this.setState(state => ({
+                                Score: state.Score + 1,
+                                number1: Math.ceil(Math.random() *10),
+                                number2: Math.ceil(Math.random() * 10),
+                                Response: "",
+                                incorect: false,
+                            }));
+                        }else{
+                            // do something if the answer is wrong
+                            this.setState(state =>({
+                                Response: "",
+                                incorect: true,
+                            }))
+                        }
+                    }
+                }
+            }
+            ReactDOM.render(<App />, document.querySelector("#one"));
+
+        </script>
+    </body>
+</html>
